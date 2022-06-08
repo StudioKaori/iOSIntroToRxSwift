@@ -64,10 +64,16 @@ class ViewController: UIViewController {
             
         }.disposed(by: bag)
         
-        // bind a model selected handler
+        // bind a model selected handler, when it's clicked
+        tableView.rx.modelSelected(Product.self).bind { product in
+            print(product.title)
+        }.disposed(by: bag)
         
         // Fetch items
+        viewModel.fetchItems()
+        
     }
+        
 
 }
 
