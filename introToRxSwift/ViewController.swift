@@ -14,7 +14,7 @@ struct Product {
     let title: String
 }
 
-struct ProductViewMode {
+struct ProductViewModel {
     // take generic
     var items = PublishSubject<[Product]>()
     
@@ -40,12 +40,34 @@ class ViewController: UIViewController {
         
         return tableView
     }()
+    
+    private var viewModel = ProductViewModel()
+    
+    private var bag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        view.addSubview(tableView)
+        tableView.frame = view.bounds
+        bindTableData()
     }
 
+    func bindTableData() {
+        // Bind items to table
+        viewModel.items.bind(to: tableView.rx.items(
+            cellIdentifier: "cell",
+            cellType: UITableViewCell.self)
+        ) { row, model, cell in
+            cell.textLabel?.text = model.title
+            cell.imageView?.image = UIImage(systemName: model.imageName)
+            
+        }.disposed(by: bag)
+        
+        // bind a model selected handler
+        
+        // Fetch items
+    }
 
 }
 
